@@ -1127,10 +1127,11 @@ class Message:
             raise TypeError('Missing destination channel')
 
         import requests
+        import requests.packages.urllib3
+        requests.packages.urllib3.disable_warnings()
 
         payload = self.get_payload()
-        r = requests.post(self.url, data={'payload': payload})
-
+        r = requests.post(self.url, data={'payload': payload}, verify=False)
         if r.status_code != 200:
             try:
                 r = json.loads(r.text)
